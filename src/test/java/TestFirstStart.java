@@ -10,32 +10,33 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class TestFirstStart {
-    private WebDriver driver;
+    private WebDriver chromeDriver;
+
     private WebDriverWait webDriverWait;
 
     @Before
     public void setUp(){
-        driver = new ChromeDriver();
-        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        chromeDriver = new ChromeDriver();
+        webDriverWait = new WebDriverWait(chromeDriver, Duration.ofSeconds(15));
     }
 
     @Test
     public void openBrowser(){
-        driver.get("https://github.com/");
+        chromeDriver.get("https://github.com/");
     }
 
     @Test
     public void logIn(){
-        driver.get("http://localhost/litecart/admin/");
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
-        Assert.assertTrue(driver.findElement(By.id("sidebar")).isDisplayed());
+        chromeDriver.get("http://localhost/litecart/admin/");
+        chromeDriver.findElement(By.name("username")).sendKeys("admin");
+        chromeDriver.findElement(By.name("password")).sendKeys("admin");
+        chromeDriver.findElement(By.name("login")).click();
+        Assert.assertTrue(chromeDriver.findElement(By.id("sidebar")).isDisplayed());
     }
 
     @After
     public void closeAndShutDown(){
-        driver.quit();
-        driver = null;
+        chromeDriver.quit();
+        chromeDriver = null;
     }
 }
