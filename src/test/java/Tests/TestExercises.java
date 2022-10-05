@@ -56,8 +56,8 @@ public class TestExercises extends SetUp {
                 By.xpath("//div[@id='"+ name +"']//ul[@class='listing-wrapper products']//li"));
 
         for (int i = 1; i <= listOfLatestProducts.size(); i++) {
-            Assert.assertEquals(driver.findElements(By.xpath("//div[@id='"+ name +"']//" +
-                    "ul[@class='listing-wrapper products']//li[" + i + "]//div[contains(@class, 'sticker')]")).size(), 1);
+            Assert.assertEquals(1, driver.findElements(By.xpath("//div[@id='"+ name +"']//" +
+                    "ul[@class='listing-wrapper products']//li[" + i + "]//div[contains(@class, 'sticker')]")).size());
         }
         return true;
     }
