@@ -1,11 +1,14 @@
 package Tests;
 
 import SetUp.SetUp;
+import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TestExercises extends SetUp {
@@ -15,6 +18,28 @@ public class TestExercises extends SetUp {
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
+    }
+
+    @Test
+    public void alphabeticalSequence(){
+        var unsortedListOfCountries = new ArrayList<String>();
+        var alphabeticallySortedListOfCountries = new ArrayList<String>();
+
+        authMethod("http://localhost/litecart/admin/?app=countries&doc=countries");
+
+        List<WebElement> listOfCountries = driver.findElements(By.xpath("//table//tr/td[5]"));
+
+        for(int i = 0; i < listOfCountries.size(); i++){
+            WebElement element = listOfCountries.get(i);
+            unsortedListOfCountries.add(element.getText());
+        }
+
+        alphabeticallySortedListOfCountries = (ArrayList<String>) unsortedListOfCountries.clone();
+        Collections.sort(alphabeticallySortedListOfCountries);
+
+        Assert.assertThat(alphabeticallySortedListOfCountries,
+                IsIterableContainingInOrder.contains(unsortedListOfCountries.toArray()));
+
     }
 
     @Test
