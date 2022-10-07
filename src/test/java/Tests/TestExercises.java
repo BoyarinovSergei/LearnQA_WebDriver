@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.assertj.core.api.SoftAssertions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +25,7 @@ public class TestExercises extends SetUp {
     public void alphabeticalSequence(){
         var unsortedListOfCountries = new ArrayList<String>();
         var alphabeticallySortedListOfCountries = new ArrayList<String>();
+        SoftAssertions softAssertions = new SoftAssertions();
 
         authMethod("http://localhost/litecart/admin/?app=countries&doc=countries");
 
@@ -40,6 +42,29 @@ public class TestExercises extends SetUp {
         Assert.assertThat(alphabeticallySortedListOfCountries,
                 IsIterableContainingInOrder.contains(unsortedListOfCountries.toArray()));
 
+
+        List<WebElement> listOfZonesMainPage = driver.findElements(By.xpath("//table//tr/td[6]"));
+        List<WebElement> listOfZones;
+        var unsortedListOfTimezones = new ArrayList<String>();
+        var alphabeticallySortedListOfTimezones = new ArrayList<String>();
+
+        for(int i = 0; i < listOfZonesMainPage.size(); i++){
+            WebElement element = listOfZonesMainPage.get(i);
+            if(!element.getText().equals("0")){
+                driver.findElement(By.xpath("(//table//tr/td[5])["+ (i + 1) +"]/a")).click();
+                listOfZones = driver.findElements(By.xpath("//table[@id='table-zones']//tr/td[3]"));
+
+                alphabeticallySortedListOfTimezones = (ArrayList<String>) unsortedListOfTimezones.clone();
+                Collections.sort(alphabeticallySortedListOfTimezones);
+
+                softAssertions.assertThat(alphabeticallySortedListOfTimezones)
+                        .as("Список геозон расположен не в алфавитом порядке")
+                        .isEqualTo(IsIterableContainingInOrder.contains(unsortedListOfTimezones.toArray()));
+                driver.navigate().back();
+                listOfZonesMainPage = driver.findElements(By.xpath("//table//tr/td[6]"));
+            }
+            softAssertions.assertAll();
+        }
     }
 
     @Test
