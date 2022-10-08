@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -18,6 +20,8 @@ public class SetUp {
     @Before
     public void setUpDriver(){
         driver = new ChromeDriver();
+//        driver = new EdgeDriver();
+//        driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1));
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }

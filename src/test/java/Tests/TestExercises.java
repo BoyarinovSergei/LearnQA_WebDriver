@@ -1,6 +1,7 @@
 package Tests;
 
 import SetUp.SetUp;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -20,6 +21,77 @@ public class TestExercises extends SetUp {
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
+    }
+
+    @Test
+    public void openPageCorrectly(){
+        driver.get("http://localhost/litecart/en/");
+
+        String nameOnMainPage = driver.findElement(By.cssSelector("#box-campaigns div div.name")).getText();
+        int oldPriceOnMainPage = Integer.parseInt(driver.findElement(
+                By.cssSelector("#box-campaigns div div.price-wrapper s")).getText().substring(1,3));
+        int priceOnMainPage = Integer.parseInt(driver.findElement(
+                By.cssSelector("#box-campaigns div div.price-wrapper strong")).getText().substring(1,3));
+
+        String oldPriceColorOnMainPage = driver.findElement(
+                By.cssSelector("#box-campaigns div div.price-wrapper s")).getCssValue("color");
+
+        String priceColorOnMainPage =
+                driver.findElement(By.cssSelector("#box-campaigns div div.price-wrapper strong"))
+                        .getCssValue("color");
+
+        String fontWeightOfPriceOnMainPage =
+                driver.findElement(By.cssSelector("#box-campaigns div div.price-wrapper strong"))
+                        .getCssValue("font-weight");
+
+
+        int fontSizeOfOldPriceOnMainPage = Integer.parseInt(driver.findElement(
+                By.cssSelector("#box-campaigns div div.price-wrapper s")).getCssValue("font-size").substring(0,2));
+
+        int fontSizeOfPriceOnMainPage = Integer.parseInt(driver.findElement(By.cssSelector("#box-campaigns div div.price-wrapper strong"))
+                .getCssValue("font-size").substring(0,2));
+
+        Assertions.assertThat(fontSizeOfOldPriceOnMainPage < fontSizeOfPriceOnMainPage)
+                .as("На главной странице, зачеркнутая цена оказалась размером больше, чем обычная").isTrue();
+
+        driver.findElement(By.cssSelector("#box-campaigns a.link")).click();//переход в карточку товара
+
+        String nameOnProductPage = driver.findElement(By.cssSelector("h1")).getText();
+
+        int oldPriceOnProductPage = Integer.parseInt(driver.findElement(
+                By.cssSelector("div.price-wrapper s")).getText().substring(1,3));
+        int priceOnProductPage = Integer.parseInt(driver.findElement(
+                By.cssSelector("div.price-wrapper strong")).getText().substring(1,3));
+
+        String oldPriceColorOnProductPage = driver.findElement(
+                By.cssSelector("div.price-wrapper s")).getCssValue("color");
+
+        String priceColorOnProductPage =
+                driver.findElement(By.cssSelector("div.price-wrapper strong"))
+                        .getCssValue("color");
+
+        String fontWeightOfPriceOnProductPage =
+                driver.findElement(By.cssSelector("div.price-wrapper strong"))
+                        .getCssValue("font-weight");
+
+        Assertions.assertThat(priceColorOnMainPage).as(
+                "Цвет обычной центы на главной стр отличается от цвета на странице товара").isEqualTo(priceColorOnProductPage);
+        Assertions.assertThat(fontWeightOfPriceOnMainPage).as(
+                "Толщина обычной цены на главной стр отличается от цвета на странице товара").isEqualTo(fontWeightOfPriceOnProductPage);
+
+        Assertions.assertThat(oldPriceOnMainPage).as(
+                "Зачеркнутая цена на главной странице отличается от цены на странице товара")
+                .isEqualTo(oldPriceOnProductPage);
+
+        Assertions.assertThat(priceOnMainPage).as(
+                "Основная цена на главной странице отличается от цены на странице товара")
+                .isEqualTo(priceOnProductPage);
+
+        Assertions.assertThat(nameOnMainPage).as(
+                "Название товара на главной странице и в карточке товара отличаются").isEqualTo(nameOnProductPage);
+
+        Assertions.assertThat(oldPriceColorOnMainPage).as(
+                "Цвет зачеркнутой центы на главной стр отличается от цвета на странице товара").isEqualTo(oldPriceColorOnProductPage);
     }
 
     @Test
