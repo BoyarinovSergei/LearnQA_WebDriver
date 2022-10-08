@@ -1,7 +1,6 @@
 package Tests;
 
 import SetUp.SetUp;
-import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -39,9 +38,7 @@ public class TestExercises extends SetUp {
         alphabeticallySortedListOfCountries = (ArrayList<String>) unsortedListOfCountries.clone();
         Collections.sort(alphabeticallySortedListOfCountries);
 
-        Assert.assertThat(alphabeticallySortedListOfCountries,
-                IsIterableContainingInOrder.contains(unsortedListOfCountries.toArray()));
-
+        Assert.assertTrue(alphabeticallySortedListOfCountries.equals(unsortedListOfCountries));
 
         List<WebElement> listOfZonesMainPage = driver.findElements(By.xpath("//table//tr/td[6]"));
         List<WebElement> listOfZones;
@@ -54,17 +51,23 @@ public class TestExercises extends SetUp {
                 driver.findElement(By.xpath("(//table//tr/td[5])["+ (i + 1) +"]/a")).click();
                 listOfZones = driver.findElements(By.xpath("//table[@id='table-zones']//tr/td[3]"));
 
+                for(int b = 0; b < listOfZones.size(); b++){
+                    WebElement element2 = listOfZones.get(b);
+                    unsortedListOfTimezones.add(element2.getText());
+                }
+
                 alphabeticallySortedListOfTimezones = (ArrayList<String>) unsortedListOfTimezones.clone();
                 Collections.sort(alphabeticallySortedListOfTimezones);
 
                 softAssertions.assertThat(alphabeticallySortedListOfTimezones)
-                        .as("Список геозон расположен не в алфавитом порядке")
-                        .isEqualTo(IsIterableContainingInOrder.contains(unsortedListOfTimezones.toArray()));
+                        .as("Элементы расположены не в алфавитном порядке на странице страны")
+                        .isEqualTo(unsortedListOfTimezones);
+
                 driver.navigate().back();
                 listOfZonesMainPage = driver.findElements(By.xpath("//table//tr/td[6]"));
             }
-            softAssertions.assertAll();
         }
+        softAssertions.assertAll();
     }
 
     @Test
