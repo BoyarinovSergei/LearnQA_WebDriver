@@ -13,6 +13,8 @@ import java.util.List;
 
 public class TestExercises extends SetUp {
 
+    private SoftAssertions softAssertions = new SoftAssertions();
+
     public void authMethod(String address) {
         driver.get(address);
         driver.findElement(By.name("username")).sendKeys("admin");
@@ -21,10 +23,44 @@ public class TestExercises extends SetUp {
     }
 
     @Test
+    public void zoneSequence(){
+        var unsortedListOfZones = new ArrayList<String>();
+        var alphabeticallySortedListOfZones = new ArrayList<String>();
+
+        authMethod("http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones");
+        List<WebElement> listOfCountries = driver.findElements(By.xpath(
+                "//table[@class='dataTable']//td[3]/a"));
+
+        for(int i = 0; i < listOfCountries.size(); i++){
+            WebElement element = listOfCountries.get(i);
+            element.click();
+
+            List<WebElement> elementList = driver.findElements(
+                    By.xpath("//table[@id='table-zones']//td[3]/select"));
+
+            for(int f = 0; f < elementList.size(); f++){
+                WebElement element1 = elementList.get(f);
+                unsortedListOfZones.add(element1.getText());
+            }
+
+            alphabeticallySortedListOfZones = (ArrayList<String>) unsortedListOfZones.clone();
+            Collections.sort(alphabeticallySortedListOfZones);
+
+            softAssertions.assertThat(alphabeticallySortedListOfZones)
+                    .as("Элементы расположены не в алфавитном порядке на странице внутри страны")
+                    .isEqualTo(unsortedListOfZones);
+
+            driver.navigate().back();
+            listOfCountries = driver.findElements(By.xpath(
+                    "//table[@class='dataTable']//td[3]/a"));
+        }
+        softAssertions.assertAll();
+    }
+
+    @Test
     public void alphabeticalSequence(){
         var unsortedListOfCountries = new ArrayList<String>();
         var alphabeticallySortedListOfCountries = new ArrayList<String>();
-        SoftAssertions softAssertions = new SoftAssertions();
 
         authMethod("http://localhost/litecart/admin/?app=countries&doc=countries");
 
