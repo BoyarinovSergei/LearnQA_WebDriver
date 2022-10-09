@@ -108,7 +108,7 @@ public class TestExercises extends SetUp {
             element.click();
 
             List<WebElement> elementList = driver.findElements(
-                    By.xpath("//table[@id='table-zones']//td[3]/select"));
+                    By.xpath("//table[@id='table-zones']//td[3]/select/option[@selected='selected']"));
 
             for(int f = 0; f < elementList.size(); f++){
                 WebElement element1 = elementList.get(f);
@@ -123,6 +123,8 @@ public class TestExercises extends SetUp {
                     .isEqualTo(unsortedListOfZones);
 
             driver.navigate().back();
+            alphabeticallySortedListOfZones.clear();
+            unsortedListOfZones.clear();
             listOfCountries = driver.findElements(By.xpath(
                     "//table[@class='dataTable']//td[3]/a"));
         }
