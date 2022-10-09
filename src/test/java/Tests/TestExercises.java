@@ -157,7 +157,8 @@ public class TestExercises extends SetUp {
             WebElement element = listOfZonesMainPage.get(i);
             if(!element.getText().equals("0")){
                 driver.findElement(By.xpath("(//table//tr/td[5])["+ (i + 1) +"]/a")).click();
-                listOfZones = driver.findElements(By.xpath("//table[@id='table-zones']//tr/td[3]"));
+                listOfZones = driver.findElements(By.xpath(
+                        "(//table[@id='table-zones']//tr/td[3])[not(position()=last())]"));
 
                 for(int b = 0; b < listOfZones.size(); b++){
                     WebElement element2 = listOfZones.get(b);
@@ -172,6 +173,8 @@ public class TestExercises extends SetUp {
                         .isEqualTo(unsortedListOfTimezones);
 
                 driver.navigate().back();
+                alphabeticallySortedListOfTimezones.clear();
+                unsortedListOfTimezones.clear();
                 listOfZonesMainPage = driver.findElements(By.xpath("//table//tr/td[6]"));
             }
         }
