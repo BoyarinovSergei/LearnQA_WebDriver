@@ -51,8 +51,8 @@ public class TestExercises extends SetUp {
                 driver.findElement(By.cssSelector("#box-campaigns div div.price-wrapper strong.campaign-price"))
                         .getCssValue("color").replaceAll("[^,0-9]", "").split(",");
 
-        Assertions.assertThat(priceColorOnMainPage[1]).as("Цвет основной цены на главной странице не является красным")
-                .isEqualTo(priceColorOnMainPage[2]);
+        Assertions.assertThat(priceColorOnMainPage[1]).as("Цвет основной цены на главной странице не является красным").isEqualTo("0");
+        Assertions.assertThat(priceColorOnMainPage[2]).as("Цвет основной цены на главной странице не является красным").isEqualTo("0");
 
         int fontWeightOfPriceOnMainPage = Integer.parseInt(driver.findElement(
                 By.cssSelector("#box-campaigns div div.price-wrapper strong.campaign-price"))
@@ -100,7 +100,8 @@ public class TestExercises extends SetUp {
                 driver.findElement(By.cssSelector("div.price-wrapper strong"))
                         .getCssValue("color").replaceAll("[^,0-9]", "").split(",");
 
-        Assertions.assertThat(priceColorOnProductPage[1]).as("Цвет не является красным").isEqualTo(priceColorOnProductPage[2]);
+        Assertions.assertThat(priceColorOnProductPage[1]).as("Цвет не является красным").isEqualTo("0");
+        Assertions.assertThat(priceColorOnProductPage[2]).as("Цвет не является красным").isEqualTo("0");
 
         int fontWeightOfPriceOnProductPage =
                 Integer.parseInt(driver.findElement(By.cssSelector("div.price-wrapper strong.campaign-price"))
