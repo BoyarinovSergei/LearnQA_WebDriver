@@ -19,9 +19,9 @@ public class SetUp {
 
     @Before
     public void setUpDriver(){
-        driver = new ChromeDriver();
+//        driver = new ChromeDriver();
 //        driver = new EdgeDriver();
-//        driver = new FirefoxDriver();
+        driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1));
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
