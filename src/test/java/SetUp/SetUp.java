@@ -6,8 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -42,12 +40,12 @@ public class SetUp {
         driver = null;
     }
 
-    public static String generateString(Random rng, String characters, int length)
+    public static String generateString(String characters, int length)
     {
         char[] text = new char[length];
         for (int i = 0; i < length; i++)
         {
-            text[i] = characters.charAt(rng.nextInt(characters.length()));
+            text[i] = characters.charAt(new Random().nextInt(characters.length()));
         }
         return new String(text);
     }

@@ -8,13 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.assertj.core.api.SoftAssertions;
-import org.openqa.selenium.devtools.v104.indexeddb.model.Key;
-import org.openqa.selenium.interactions.Actions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class TestExercises extends SetUp {
 
@@ -28,11 +26,53 @@ public class TestExercises extends SetUp {
     }
 
     @Test
+    public void addNewProduct(){
+        var nameOfProduct = "Product " + generateString("123456", 3);
+        var path = new File("src/files/2862.jpg").getAbsolutePath();
+
+        authMethod("http://localhost/litecart/admin/?app=catalog&doc=catalog");
+
+        driver.findElement(By.xpath("//a[contains(text(),' Add New Product')]")).click();
+
+        driver.findElement(By.xpath("//input[@name='status' and @value='1']")).click();
+        driver.findElement(By.xpath("//input[@name='name[en]']"))
+                .sendKeys(nameOfProduct);
+        driver.findElement(By.xpath("//input[@name='code']"))
+                .sendKeys("Product " + generateString("1234567890", 5));
+        driver.findElement(By.xpath("//td[contains(text(),'Unisex')]")).click();
+        driver.findElement(By.xpath("//input[@name='quantity']"))
+                .sendKeys("3");
+
+        driver.findElement(By.xpath("//input[@name='new_images[]']")).sendKeys(path);
+
+        driver.findElement(By.cssSelector("#content a[href='#tab-information']")).click();// преход на вкладку 'Information'
+        driver.findElement(By.cssSelector("input[name='keywords']")).sendKeys("Duck 40 000");
+        driver.findElement(By.cssSelector("input[name='short_description[en]']")).sendKeys("New Duck");
+        driver.findElement(By.cssSelector("div.trumbowyg-editor")).sendKeys("New Duck");
+
+        driver.findElement(By.cssSelector("#content a[href='#tab-prices']")).click(); // преход на вкладку 'Prices'
+
+        driver.findElement(By.cssSelector("input[name='purchase_price']")).sendKeys("1");
+        driver.findElement(By.cssSelector("select[name='purchase_price_currency_code']")).click();
+        driver.findElement(By.cssSelector("select[name='purchase_price_currency_code']")).sendKeys(Keys.DOWN);
+        driver.findElement(By.cssSelector("select[name='purchase_price_currency_code']")).sendKeys(Keys.ENTER);
+
+
+        driver.findElement(By.cssSelector("input[name='gross_prices[USD]']")).sendKeys("3");
+        driver.findElement(By.cssSelector("input[name='gross_prices[EUR]']")).sendKeys("3");
+        driver.findElement(By.cssSelector("button[name='save']")).click();
+
+        var actualName =
+                driver.findElement(By.xpath("(//form[@name='catalog_form']//td//a)[last()-1]")).getText();
+
+        Assertions.assertThat(nameOfProduct).as(
+                "Продукт не был создан").isEqualTo(actualName);
+    }
+
+    @Test
     public void createNewCustomer(){
-        var email = generateString(
-                new Random(), "qwertyuioasdfghjklzxcvbnm", 6) + "@yandex.ru";
-        var password = generateString(
-                new Random(), "qwertyuioasdfghjklzxcvbnm", 15);
+        var email = generateString("qwertyuioasdfghjklzxcvbnm", 6) + "@yandex.ru";
+        var password = generateString("qwertyuioasdfghjklzxcvbnm", 15);
 
         driver.get("http://localhost/litecart/en/");
         driver.findElement(By.cssSelector("#box-account-login table a ")).click();
