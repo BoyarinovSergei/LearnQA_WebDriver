@@ -5,12 +5,16 @@ import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.devtools.v104.indexeddb.model.Key;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class TestExercises extends SetUp {
 
@@ -21,6 +25,45 @@ public class TestExercises extends SetUp {
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
+    }
+
+    @Test
+    public void createNewCustomer(){
+        var email = generateString(
+                new Random(), "qwertyuioasdfghjklzxcvbnm", 6) + "@yandex.ru";
+        var password = generateString(
+                new Random(), "qwertyuioasdfghjklzxcvbnm", 15);
+
+        driver.get("http://localhost/litecart/en/");
+        driver.findElement(By.cssSelector("#box-account-login table a ")).click();
+
+        driver.findElement(By.cssSelector("#create-account input[name=tax_id]")).sendKeys("12345");
+        driver.findElement(By.cssSelector("#create-account input[name=company]")).sendKeys("Name");
+        driver.findElement(By.cssSelector("#create-account input[name=firstname]")).sendKeys("First name");
+        driver.findElement(By.cssSelector("#create-account input[name=lastname]")).sendKeys("Last name");
+        driver.findElement(By.cssSelector("#create-account input[name=address1]")).sendKeys("address1");
+        driver.findElement(By.cssSelector("#create-account input[name=address2]")).sendKeys("address2");
+        driver.findElement(By.cssSelector("#create-account input[name=postcode]")).sendKeys("12345");
+        driver.findElement(By.cssSelector("#create-account input[name=city]")).sendKeys("City");
+        driver.findElement(By.cssSelector("#create-account span.selection span span")).click();
+        driver.findElement(By.cssSelector("input.select2-search__field")).sendKeys("United States");
+        driver.findElement(By.cssSelector("input.select2-search__field")).sendKeys(Keys.ENTER);
+        driver.findElement(By.cssSelector("#create-account input[name=email]"))
+                .sendKeys(email);
+        driver.findElement(By.cssSelector("#create-account input[name=phone]")).sendKeys("+1234567890");
+        driver.findElement(By.cssSelector("#create-account input[name=password]")).sendKeys(password);
+        driver.findElement(By.cssSelector("#create-account input[name=confirmed_password]")).sendKeys(password);
+        driver.findElement(By.cssSelector("#create-account button[name=create_account]")).click();
+        driver.findElement(By.cssSelector("#box-account a[href='http://localhost/litecart/en/logout']")).click();
+        driver.findElement(By.cssSelector("input[name='email']")).sendKeys(email);
+        driver.findElement(By.cssSelector("input[name='password']")).sendKeys(password);
+        driver.findElement(By.cssSelector("button[name='login']")).click();
+
+        Assertions.assertThat(isElementPresent(
+                By.cssSelector("#box-account a[href='http://localhost/litecart/en/logout']")))
+                .as("Автоирзоваться не получилось").isTrue();
+
+        driver.findElement(By.cssSelector("#box-account a[href='http://localhost/litecart/en/logout']")).click();
     }
 
     @Test

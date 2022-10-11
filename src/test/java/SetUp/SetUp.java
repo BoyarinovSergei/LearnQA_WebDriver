@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Random;
 
 public class SetUp {
 
@@ -19,9 +20,9 @@ public class SetUp {
 
     @Before
     public void setUpDriver(){
-//        driver = new ChromeDriver();
+        driver = new ChromeDriver();
 //        driver = new EdgeDriver();
-        driver = new FirefoxDriver();
+//        driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1));
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
@@ -39,5 +40,15 @@ public class SetUp {
     public void closeAndShutDown(){
         driver.quit();
         driver = null;
+    }
+
+    public static String generateString(Random rng, String characters, int length)
+    {
+        char[] text = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            text[i] = characters.charAt(rng.nextInt(characters.length()));
+        }
+        return new String(text);
     }
 }
