@@ -26,6 +26,48 @@ public class TestExercises extends SetUp {
     }
 
     @Test
+    public void testWorkWithBasket(){
+        driver.get("http://localhost/litecart/en/");
+        addProductAndCheckBasketCounter("1");
+        addProductAndCheckBasketCounter("2");
+        addProductAndCheckBasketCounter("3");
+
+        driver.findElement(By.cssSelector("#cart-wrapper a[class='link']")).click();
+        driver.findElement(By.xpath("//ul[@class='shortcuts']/li[1]")).click();
+
+        int counter = driver.findElements(By.cssSelector("#order_confirmation-wrapper tr td[class='item']")).size();
+
+        while(counter != 0){
+            driver.findElement(By.xpath("//button[@name='remove_cart_item']")).click();
+
+            int finalCounter = counter;
+            webDriverWait.until(webDriver ->
+                    driver.findElements(
+                            By.cssSelector("#order_confirmation-wrapper tr td[class='item']"))
+                            .size() == (finalCounter -1));
+
+            counter = driver.findElements(By.cssSelector("#order_confirmation-wrapper tr td[class='item']")).size();
+        }
+    }
+
+    public void addProductAndCheckBasketCounter(String counterShouldBe){
+        driver.findElement(By.xpath("//div[@id='box-most-popular']//li[1]")).click();
+
+        if(isElementPresent(By.xpath("//select[@name='options[Size]']"))){
+            driver.findElement(By.xpath("//select[@name='options[Size]']")).click();
+            driver.findElement(By.xpath("//select[@name='options[Size]']")).sendKeys(Keys.DOWN);
+            driver.findElement(By.xpath("//select[@name='options[Size]']")).sendKeys(Keys.ENTER);
+            driver.findElement(By.cssSelector("table button[name='add_cart_product']")).click();
+        }else {
+            driver.findElement(By.cssSelector("table button[name='add_cart_product']")).click();
+        }
+
+        webDriverWait.until(webDriver -> driver.findElement(
+                By.cssSelector("#cart-wrapper .quantity")).getText().equals(counterShouldBe));
+        driver.findElement(By.cssSelector("#logotype-wrapper")).click();
+    }
+
+    @Test
     public void addNewProduct(){
         var nameOfProduct = "Product " + generateString("123456", 3);
         var path = new File("src/files/2862.jpg").getAbsolutePath();
