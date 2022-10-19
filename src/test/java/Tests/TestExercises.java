@@ -10,9 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.assertj.core.api.SoftAssertions;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class TestExercises extends SetUp {
 
@@ -23,6 +21,31 @@ public class TestExercises extends SetUp {
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
+    }
+
+    @Test
+    public void testCheckLinksInNewTab(){
+        String newWindow;
+
+        authMethod("http://localhost/litecart/admin/");
+        driver.findElement(By.xpath("//span[contains(text(),'Countries')]")).click();
+
+        String firstHandle = driver.getWindowHandle();
+
+        Set<String> setOfOldHandle  = driver.getWindowHandles();
+
+        driver.findElement(By.xpath("(//td[@id='content'] //td/a/i)[1]")).click();
+
+        List<WebElement> list = driver.findElements(
+                By.cssSelector("#content a[target='_blank'] i[class='fa fa-external-link']"));
+
+        for(int i = 0; i < list.size(); i++){
+            list.get(i).click();
+            newWindow = webDriverWait.until(anyWindowOtherThan(setOfOldHandle));
+            driver.switchTo().window(newWindow);
+            driver.close();
+            driver.switchTo().window(firstHandle);
+        }
     }
 
     @Test

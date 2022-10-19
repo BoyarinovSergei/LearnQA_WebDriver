@@ -6,10 +6,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Random;
+import java.util.Set;
 
 public class SetUp {
 
@@ -23,6 +25,16 @@ public class SetUp {
 //        driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1));
         webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    }
+
+    public ExpectedCondition<String> anyWindowOtherThan(Set<String> oldWindows) {
+        return new ExpectedCondition<String>() {
+            public String apply(WebDriver driver) {
+                Set<String> handles = driver.getWindowHandles();
+                handles.removeAll(oldWindows);
+                return handles.size() > 0 ? handles.iterator().next() : null;
+            }
+        };
     }
 
     public boolean isElementPresent(By by) {
