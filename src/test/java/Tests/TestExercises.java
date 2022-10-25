@@ -24,6 +24,34 @@ public class TestExercises extends SetUp {
     }
 
     @Test
+    public void testCheckLog(){
+        authMethod("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1");
+
+        List<WebElement> listOfElements = driver.findElements(By.xpath(
+                "//table[@class='dataTable']//tr/td[3]/a[contains(@href, 'edit_product')]"));
+
+        for(int i = 0; listOfElements.size() > i; i++){
+            listOfElements.get(i).click();
+
+            softAssertions.assertThat(driver.manage().logs().get("browser").getAll().size()).as(
+                    "В логах 'browser' появилась запись").isEqualTo(0);
+
+            softAssertions.assertThat(driver.manage().logs().get("driver").getAll().size()).as(
+                    "В логах 'driver' появилась запись").isEqualTo(0);
+
+            softAssertions.assertThat(driver.manage().logs().get("client").getAll().size()).as(
+                    "В логах 'client' появилась запись").isEqualTo(0);
+
+            driver.navigate().back();
+            listOfElements.clear();
+            listOfElements = driver.findElements(By.xpath(
+                    "//table[@class='dataTable']//tr/td[3]/a[contains(@href, 'edit_product')]"));
+
+            softAssertions.assertAll();
+        }
+    }
+
+    @Test
     public void testCheckLinksInNewTab(){
         String newWindow;
 
