@@ -12,6 +12,8 @@ import org.assertj.core.api.SoftAssertions;
 import java.io.File;
 import java.util.*;
 
+import static Help.Helper.*;
+
 public class TestExercises extends SetUp {
 
     private SoftAssertions softAssertions = new SoftAssertions();
@@ -104,7 +106,7 @@ public class TestExercises extends SetUp {
     public void addProductAndCheckBasketCounter(String counterShouldBe){
         driver.findElement(By.xpath("//div[@id='box-most-popular']//li[1]")).click();
 
-        if(isElementPresent(By.xpath("//select[@name='options[Size]']"))){
+        if(isElementPresentBy(By.xpath("//select[@name='options[Size]']"))){
             driver.findElement(By.xpath("//select[@name='options[Size]']")).click();
             driver.findElement(By.xpath("//select[@name='options[Size]']")).sendKeys(Keys.DOWN);
             driver.findElement(By.xpath("//select[@name='options[Size]']")).sendKeys(Keys.ENTER);
@@ -192,7 +194,7 @@ public class TestExercises extends SetUp {
         driver.findElement(By.cssSelector("input[name='password']")).sendKeys(password);
         driver.findElement(By.cssSelector("button[name='login']")).click();
 
-        Assertions.assertThat(isElementPresent(
+        Assertions.assertThat(isElementPresentBy(
                 By.cssSelector("#box-account a[href='http://localhost/litecart/en/logout']")))
                 .as("Автоирзоваться не получилось").isTrue();
 
@@ -397,16 +399,16 @@ public class TestExercises extends SetUp {
         for (int i = 1; i <= elementList.size(); i++) {
             driver.findElement(By.xpath(
                     "//div[@id='box-apps-menu-wrapper']//li[@id='app-'][" + i + "]")).click();
-            Assert.assertTrue(isElementPresent(By.xpath("//h1")));
+            Assert.assertTrue(isElementPresentBy(By.xpath("//h1")));
 
-            if (isElementPresent(By.xpath("//div[@id='box-apps-menu-wrapper']//li[@id='app-']//li"))) {
+            if (isElementPresentBy(By.xpath("//div[@id='box-apps-menu-wrapper']//li[@id='app-']//li"))) {
                 List<WebElement> elementList2 = driver
                         .findElements(By.xpath("//div[@id='box-apps-menu-wrapper']//li[@id='app-']//li"));
 
                 for (int t = 1; t <= elementList2.size(); t++) {
                     driver.findElement(By.xpath(
                             "//div[@id='box-apps-menu-wrapper']//li[@id='app-']//li[" + t + "]")).click();
-                    Assert.assertTrue(isElementPresent(By.xpath("//h1")));
+                    Assert.assertTrue(isElementPresentBy(By.xpath("//h1")));
                 }
             }
         }
