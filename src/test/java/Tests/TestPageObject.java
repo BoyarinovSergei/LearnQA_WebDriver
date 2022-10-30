@@ -13,7 +13,7 @@ public class TestPageObject extends SetUp {
     private BasketPage basketPage = new BasketPage();
 
     @Test
-    public void testsdfa(){
+    public void testBasketChecker(){
         open("http://localhost/litecart/en/");
 
         addProductAndCheckBasketCounter("1");
